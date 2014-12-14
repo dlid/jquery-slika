@@ -2,6 +2,8 @@
 
 Sika is a tiny jQuery plugin that will turn your list of image links into a list filterable by tags
 
+[Check out a demo](http://goo.gl/9aZIUS Demo)
+
 ### Features
  - Add tag filtering to a static list of images
  - Simple Lightbox feature for viewing images
@@ -40,9 +42,9 @@ Then you have to have your list of images. Currently Slika supports only a wrapp
 That's what you need. Then you initialize Slika on your wrapper, and boom you will have the ability to quickly filter and drill down by the tags you've set.
 
 ```sh
-<script>
+<script type="text/javascript">
 $(function() {
-  $('#wrapper').slika();
+  $("#wrapper").slika();
 });
 </script>
 ```
