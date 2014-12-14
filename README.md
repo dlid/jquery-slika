@@ -1,6 +1,6 @@
 # jQuery Slika
 
-Sika is a tiny jQuery plugin that will turn your list of image links into a list filterable by tags
+Slika is a tiny jQuery plugin that will turn your list of image links into a list filterable by tags
 
 [Check out a demo](http://goo.gl/9aZIUS Demo)
 
