@@ -2,6 +2,10 @@
 
 Sika is a tiny jQuery plugin that will turn your list of image links into a list filterable by tags
 
+### Features
+ - Add tag filtering to a static list of images
+ - Simple Lightbox feature for viewing images
+
 ### Version
 1.0
 
@@ -48,6 +52,7 @@ $(function() {
  - Let the user change CSS class names
  - Back/Forward navigation in Lightbox
  - Load data from an Ajax source
+ - Support paging
  - Additional and more customizable filters
  - Appliable to other things than images
  - More flexible selectors (supporting more than a-elements containing an img-element)
