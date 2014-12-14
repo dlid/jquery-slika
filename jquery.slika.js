@@ -11,7 +11,7 @@ window.slika = (function (window, $) {
      * @global $
      */
 
-    var  dataNameSlikaInstance = "slika",
+    var dataNameSlikaInstance = "slika",
         Slika = function (elm, options) {
             this.version = '0.1';
             this.jqElement = $(elm);
@@ -46,12 +46,10 @@ window.slika = (function (window, $) {
             fontWeight: 'bold'
         };
 
-    function slikaDebug() {
-        if (this.config.debug && console !== undefined && console.log !== undefined) {
-            console.log.apply(window.console, arguments);
-        }
-    }
-
+    /**
+     * Update the location hash to match the current filter
+     * @param  {object} slika [description]
+     */
     function slikaUpdateHash(slika) {
         var i, hashQuery = "";
 
@@ -69,6 +67,9 @@ window.slika = (function (window, $) {
         }
     }
 
+    /**
+     * Event receiver triggered when a tag is selected in the list
+     */
     function slikaSelectTag() {
         var slika = $(this).data(dataNameSlikaInstance),
             selectedTag = $(this).val();
@@ -84,6 +85,10 @@ window.slika = (function (window, $) {
         slikaUpdateHash(slika);
     }
 
+    /**
+     * Event receiver triggered when a tag was clicked to be removed
+     * @param  {Event} e [description]
+     */
     function slikaRemoveTag(e) {
         var slika = $(this).parent().data(dataNameSlikaInstance),
             selectedTag = $(this).data('tag'),
@@ -103,7 +108,11 @@ window.slika = (function (window, $) {
         slikaUpdateHash(slika);
     }
 
-
+    /**
+     * Start a loader with a specified ID
+     * @param  {string} jqLoaderElementId The ID of the loader element
+     * @param  {$.Deferred} jqDeferred    Deferred object to wait for
+     */
     function startLoader(jqLoaderElementId, jqDeferred) {
         var deferred = $.Deferred(),
             jqLoaderElement = $('#' + jqLoaderElementId),
@@ -138,6 +147,10 @@ window.slika = (function (window, $) {
         return deferred;
     }
 
+    /**
+     * Create a new loader element
+     * @return {jQuery} New jQuery Element
+     */
     function slikaCreateLoader() {
         uidCounter += 1;
         return $('<span>').attr('id', idNameLoader + uidCounter)
@@ -145,6 +158,9 @@ window.slika = (function (window, $) {
             .html('<span>.</span><span>.</span><span>.</span>');
     }
 
+    /**
+     * Close the overlay, the image and remove the elements from the DOM
+     */
     function slikaCloseOverlay() {
         var i = 0;
 
@@ -159,6 +175,10 @@ window.slika = (function (window, $) {
         $('.' + classNameOverlayElement).fadeOut('fast', animationReady);
     }
 
+    /**
+     * Center the given element on the screen
+     * @param  {jQuery} jqElm jQuery element to center
+     */
     function slikaCenterElement(jqElm) {
         var windowWidth = $(window).width(), windowHeight = $(window).height(),
             w = $(jqElm).width(), h = $(jqElm).height(),
@@ -171,6 +191,10 @@ window.slika = (function (window, $) {
         });
     }
 
+    /**
+     * Iterate all image elements and extract tags
+     * @param  {object} slika Current Slika instance
+     */
     function slikaParseElements(slika) {
         var tags = {}, dataTags,  i, tagNames = [], imageTags = [];
 
@@ -203,6 +227,10 @@ window.slika = (function (window, $) {
         };
     }
 
+    /**
+     * Callback for when an image is clicked
+     * @param  {Event} e Click event
+     */
     function slikaCallbackImageClick(e) {
         e.preventDefault();
         var jqContainer = $(this).closest('.' + classNameWrapperElement),
@@ -283,8 +311,10 @@ window.slika = (function (window, $) {
         });
     }
 
-
-
+    /**
+     * Refresh the toolbar to only show the available tags
+     * @param  {object} slika The current Slika instance
+     */
     function slikaRefreshToolbar(slika) {
         var deferred = $.Deferred(),
             allTagitems = [],
@@ -367,15 +397,15 @@ window.slika = (function (window, $) {
 
     Slika.prototype = {
 
+        // Default parameters
         defaults: {
-            debug : false,
             useHash : true,
             selectText : 'Filter by tag',
             closeText : 'x'
         },
 
+        // Initialize Slika
         init: function () {
-            slikaDebug("Init", this);
             var self = this, i;
             this.config = $.extend(true, {}, this.defaults, Slika.globals, this.options);
             this.jqImageElements = this.jqElement.find(defaultImageSelector);
@@ -414,10 +444,12 @@ window.slika = (function (window, $) {
                 });
                 this.refreshFromHash();
             }
-
-
         },
 
+        /**
+         * Set the current tag filter
+         * @param  {string} newFilter string with uri encoded tags separated with /
+         */
         setFilter : function (newFilter) {
             if (typeof newFilter === "string") {
                 var tags = newFilter.split('/'),
@@ -437,6 +469,9 @@ window.slika = (function (window, $) {
             }
         },
 
+        /**
+         * Refresh the filter and images based on current hash string
+         */
         refreshFromHash : function () {
             if (document.location.hash.indexOf('#!/') === 0) {
                 this.setFilter(document.location.hash.substr(3));
@@ -446,6 +481,9 @@ window.slika = (function (window, $) {
             }
         },
 
+        /**
+         * Refresh the toolbar
+         */
         refreshToolbar : function () {
             var self = this,
                 tbr = this.jqToolbarElement,
@@ -461,6 +499,7 @@ window.slika = (function (window, $) {
 
     };
 
+    // Add as a jQuery plugin
     $.fn.slika = function (options) {
         if (Slika.prototype[options]) {
             // only call methods on created objects
@@ -474,7 +513,7 @@ window.slika = (function (window, $) {
                     if ($(this).data(dataNameSlikaInstance)) {
                         return this;
                     }
-                    new Slika(this, options || {}).init();
+                    return new Slika(this, options || {}).init();
                 });
             }
             $.error('No method ' + options + ' in slika');
